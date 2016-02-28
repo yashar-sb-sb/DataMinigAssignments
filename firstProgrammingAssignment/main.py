@@ -9,6 +9,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 def plot(mi, q1, q2, q3, ma):
+  print(mi, q1, q2, q3, ma)
   if(ma - mi > 0):
     q1 -= mi
     q2 -= mi
@@ -27,6 +28,8 @@ def plot(mi, q1, q2, q3, ma):
     mi = 1.9 * mi -0.95
     ma = 1.9 * ma -0.95
 
+  else:
+    q1 = q2 = q3 = mi = ma = 0
     
   pygame.init()
   display = (600, 600)
@@ -132,6 +135,11 @@ def main():
         data.append(tmp)
         tmp = 0
         flag = False
+
+  if len(data) < 4:
+    data = 4 * data
+
+  
   l, q2, r = findMedian(data)
   l, q1, _ = findMedian(l)
   _, q3, r = findMedian(r)
