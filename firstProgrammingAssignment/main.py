@@ -115,7 +115,7 @@ def findMedian(a):
 def main():
   data = []
   if len(sys.argv) > 1:
-    data = map(int, sys.argv[1:])
+    data = list(map(int, sys.argv[1:]))
   else:
     inp = sys.stdin.read()
     tmp = 0
