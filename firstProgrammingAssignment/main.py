@@ -35,7 +35,7 @@ def plot(mi, q1, q2, q3, ma):
     
   framesCount = 0
     
-  a, x, y, z = 1,0,0,0 #random.randint(-2,2),random.randint(-2,2),random.randint(-2,2),random.randint(-2,2)
+  a, x, y, z = 1,0,1,0
     
   while True:
     for event in pygame.event.get():
@@ -81,6 +81,10 @@ def plot(mi, q1, q2, q3, ma):
     sq((
       (0.1,0.1,q1),
       (0.1,0.1,q3),
+      ))
+    sq((
+      (0,0,mi),
+      (0,0,ma),
       ))
     pygame.display.flip()
     clock.tick(30)
