@@ -1,0 +1,3 @@
+needed libraries:
+pygame
+PyOpenGLw
