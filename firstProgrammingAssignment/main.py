@@ -3,23 +3,29 @@ from algorithms.array import selection
 import sys, pygame, math
 from pygame.locals import *
 
-import random
-
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-def plot(mi, q1, q2, q3, ma):
+def plot(mi, q1, q2, q3, ma, outliers, ll, rl):
   print(mi, q1, q2, q3, ma)
+  mi = min(mi,ll)
+  ma = max(ma,rl)
   if(ma - mi > 0):
     q1 -= mi
     q2 -= mi
     q3 -= mi
     ma -= mi
+    ll -= mi
+    rl -= mi
+    outliers = list(map(lambda x: x - mi, outliers))
     mi = 0
 
     q1 /= ma
     q2 /= ma
     q3 /= ma
+    ll /= ma
+    rl /= ma
+    outliers = list(map(lambda x: x / ma, outliers))
     ma = 1
 
     q1 = 1.9 * q1 -0.95
@@ -27,6 +33,9 @@ def plot(mi, q1, q2, q3, ma):
     q3 = 1.9 * q3 -0.95
     mi = 1.9 * mi -0.95
     ma = 1.9 * ma -0.95
+    ll = 1.9 * ll -0.95
+    rl = 1.9 * rl -0.95
+    outliers = list(map(lambda x: 1.9 * x - 0.95, outliers))
 
   else:
     q1 = q2 = q3 = mi = ma = 0
@@ -64,11 +73,11 @@ def plot(mi, q1, q2, q3, ma):
         
     glRotatef(a,x,y,z)
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-    sq(genFlat(mi))
+    sq(genFlat(ll))
     sq(genFlat(q1))
     sq(genFlat(q2))
     sq(genFlat(q3))
-    sq(genFlat(ma))
+    sq(genFlat(rl))
     sq((
       (-0.1,-0.1,q1),
       (-0.1,-0.1,q3),
@@ -86,9 +95,15 @@ def plot(mi, q1, q2, q3, ma):
       (0.1,0.1,q3),
       ))
     sq((
-      (0,0,mi),
-      (0,0,ma),
+      (0,0,rl),
+      (0,0,ll),
       ))
+
+    for i in outliers:
+      sq(cross(i))
+
+
+      
     pygame.display.flip()
     clock.tick(30)
 
@@ -110,6 +125,17 @@ def sq(verts):
       glVertex3fv(trans(verts[i]))
       glVertex3fv(trans(verts[j]))
   glEnd()
+
+  
+def cross(pos):
+  return(
+    (0, 0, pos + 0.01),
+    (0, 0, pos - 0.01),
+    (0.01, 0, pos),
+    (-0.01, 0, pos),
+    (0, 0.01, pos),
+    (0, -0.01, pos),
+    )
 
 def findMedian(a):
   selection.randomizedSelection(a, len(a)/2)
@@ -145,7 +171,17 @@ def main():
   _, q3, r = findMedian(r)
   mi = min(l)
   ma = max(r)
-  plot(mi,q1,q2,q3,ma)
+
+  iqr = q3 - q1
+  outliers = []
+
+  rl, ll = q3 + 1.5 * iqr, q1 - 1.5 * iqr
+  
+  for i in data:
+    if i > rl or i < ll:
+      outliers.append(i)
+
+  
+  plot(mi,q1,q2,q3,ma,outliers,ll, rl)
 
 main()
-#selection.randomizedSelection(
