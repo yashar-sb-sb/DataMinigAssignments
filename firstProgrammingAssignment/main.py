@@ -7,7 +7,9 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 def plot(mi, q1, q2, q3, ma, outliers, ll, rl):
-  print(mi, q1, q2, q3, ma)
+  print("Min: ", mi,"\nQ1: " , q1, "\nQ2: ", q2, "\nQ3: ", q3, "\nMax: ", ma)
+  print("Outlier Bounds: ", ll, rl)
+  print("Outliers: ", outliers)
   mi = min(mi,ll)
   ma = max(ma,rl)
   if(ma - mi > 0):

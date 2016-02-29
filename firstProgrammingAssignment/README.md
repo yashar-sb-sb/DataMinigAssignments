@@ -5,6 +5,9 @@ PyOpenGLw
 run the program using this command:
 python3 main.py [integers]
 
+Complexity: linear in length of input.
+
+
 USE X, Y and Z KEYS to rotate the plot.
 
 input can be given using either "command line arguments" or using "stdin"
